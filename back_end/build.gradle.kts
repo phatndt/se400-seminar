@@ -22,9 +22,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
-    implementation("org.postgresql:postgresql:42.5.0")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.3")
+//    implementation("org.springframework.boot:spring-boot-starter-security")
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.3")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
@@ -34,7 +33,9 @@ dependencies {
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.7.10")
     implementation("org.json:json:20090211")
     implementation("org.springframework.boot:spring-boot-starter-web:2.7.3")
-
+    implementation("org.springframework.data:spring-data-mongodb:3.4.2")
+    implementation("org.mongodb:mongodb-driver-sync:4.7.1")
+    implementation("org.mongodb:mongodb-jdbc:2.0.0")
 }
 
 tasks.withType<KotlinCompile> {
