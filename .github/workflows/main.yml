@@ -1,0 +1,37 @@
+name: deployment
+
+on:
+  push:
+    branches: [ "deployment" ]
+  pull_request:
+    branches: [ "deployment" ]
+
+jobs:
+
+  deployment:
+    name: deployment
+    runs-on: ubuntu-latest
+    steps:    
+    
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build container image
+      run: docker build -t registry.digitalocean.com/da2/se400:latest .
+      
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    - name: Log in to DigitalOcean Container Registry
+      run: doctl registry login
+      
+#     - name: Remove all old images 1
+#       run: doctl registry repository list-tags book-exchange
+      
+#     - name: Remove all old images 2
+#       run: doctl registry gc start --force
+    
+    - name: Push image to DigitalOcean Container Registry
+      run: docker push registry.digitalocean.com/da2/se400:latest
