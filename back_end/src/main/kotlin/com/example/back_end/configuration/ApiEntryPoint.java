@@ -4,6 +4,7 @@ public class ApiEntryPoint {
     public static final String API_VERSION = "/v1";
     public static final String TIME_OFF = API_VERSION + "/timeOff";
     public static final String CREATE_TIME_OFF = TIME_OFF + "/create";
+    public static final String READ_TIME_OFF_BY_USER_ID = TIME_OFF + "/readByUserId";
 //    public static final String AUTHENTICATION = API_VERSION + "/authentication";
 //    public static final String LOGIN = AUTHENTICATION + "/login";
 //    public static final String REGISTER = AUTHENTICATION + "/register";

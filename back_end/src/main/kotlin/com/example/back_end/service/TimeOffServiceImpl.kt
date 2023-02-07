@@ -18,4 +18,11 @@ class TimeOffServiceImpl(@Autowired private val timeOffRepository: TimeOffReposi
             throw Exception(e)
         }
     }
+
+    override fun findTimeOffRequestsByUserId(userId: String): List<TimeOffRequestEntity> {
+        val list = timeOffRepository.findTimeOffRequestsByUserId(userId)
+        return list.map {
+            it.toModel()
+        }
+    }
 }

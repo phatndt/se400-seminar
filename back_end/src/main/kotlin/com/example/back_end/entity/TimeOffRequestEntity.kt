@@ -18,3 +18,7 @@ data class TimeOffRequestEntity(
 fun TimeOffRequestEntity.toModel(): TimeOffRequest {
     return TimeOffRequest(id = this.id, timeOffType = this.timeOffType, fromDate = this.fromDate, fromDateType = this.fromDateType, toDate = this.toDate, toDateType = this.toDateType, description = this.description, userId = this.userId, status = this.status)
 }
+
+fun TimeOffRequest.toModel(): TimeOffRequestEntity {
+    return TimeOffRequestEntity(id = this.id, timeOffType = this.timeOffType, fromDate = this.fromDate, fromDateType = this.fromDateType, toDate = this.toDate, toDateType = this.toDateType, description = this.description, userId = this.userId, status = this.status)
+}
