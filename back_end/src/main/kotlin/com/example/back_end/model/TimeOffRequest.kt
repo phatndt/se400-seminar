@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId
 data class TimeOffRequest(
         @MongoId(FieldType.OBJECT_ID)
         val id: String? = null,
-        val timeOffType: TimeOffType? = null,
+        val timeOffType: String? = null,
         val fromDate: String? = null,
         val fromDateType: String? = null,
         val toDate: String? = null,
@@ -16,18 +16,5 @@ data class TimeOffRequest(
         val description: String? = null,
         val userId: String? = null,
         val createDate: String? = null,
-        val status: Status? = null,
+        val status: String? = null,
 )
-
-enum class Status {
-    SUBMIT,
-    CANCEL,
-    APPROVE,
-    REJECT,
-}
-
-enum class TimeOffType {
-    ANNUAL,
-    UN_PAY,
-    SICK,
-}

@@ -18,5 +18,4 @@ class TimeOffServiceImpl(@Autowired private val timeOffRepository: TimeOffReposi
             throw Exception(e)
         }
     }
-
 }
