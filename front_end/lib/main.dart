@@ -1,6 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front_end/main_screen.dart';
+import 'package:front_end/src/core/route/app_route.dart';
+import 'package:front_end/src/core/route/route_path.dart';
+import 'package:front_end/src/features/login/data/repository/login_repo_impl.dart';
+import 'package:front_end/src/features/login/domain/repository/login_repo.dart';
+import 'package:front_end/src/features/login/domain/usecase/login_use_case.dart';
+import 'package:front_end/src/features/login/presentation/bloc/login_bloc.dart';
+import 'package:front_end/src/features/login/presentation/screen/login_screen.dart';
+import 'package:front_end/src/features/timeoff/data/repo/time_off_repo_impl.dart';
+import 'package:front_end/src/features/timeoff/domain/repo/time_off_repo.dart';
+import 'package:front_end/src/features/timeoff/domain/usecase/create_time_off_use_case.dart';
+import 'package:front_end/src/features/timeoff/domain/usecase/read_time_off_use_case.dart';
+import 'package:front_end/src/features/timeoff/presentation/bloc/time_off_bloc.dart';
+import 'package:get_it/get_it.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await initializeDependencies();
   runApp(const MyApp());
 }
 
@@ -13,103 +33,41 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        primarySwatch: const MaterialColor(
+          0xFF337A5B,
+          <int, Color>{
+            50: Color(0xFF337A5B),
+            100: Color(0xFF337A5B),
+            200: Color(0xFF337A5B),
+            300: Color(0xFF337A5B),
+            400: Color(0xFF337A5B),
+            500: Color(0xFF337A5B),
+            600: Color(0xFF337A5B),
+            700: Color(0xFF337A5B),
+            800: Color(0xFF337A5B),
+            900: Color(0xFF337A5B),
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      onGenerateRoute: AppRouter.generateRoute,
+      initialRoute: FirebaseAuth.instance.currentUser != null
+          ? RoutePaths.main
+          : RoutePaths.logIn,
     );
   }
+}
+
+final injector = GetIt.instance;
+
+Future<void> initializeDependencies() async {
+  //Repository
+  injector.registerFactory<LoginRepo>(() => LoginRepoImpl());
+  injector.registerFactory<TimeOffRepo>(() => TimeOffRepoImpl());
+  //Use cases
+  injector.registerFactory(() => LoginUseCase(injector()));
+  injector.registerFactory(() => CreateTimeOffUseCase(injector()));
+  injector.registerFactory(() => ReadTimeOffUseCase(injector()));
+  //Bloc
+  injector.registerFactory<LoginCubit>(() => LoginCubit(injector()));
+  injector.registerFactory<TimeOffCubit>(() => TimeOffCubit(injector(), injector()));
 }
