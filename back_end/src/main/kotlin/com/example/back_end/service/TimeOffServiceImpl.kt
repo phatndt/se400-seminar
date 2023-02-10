@@ -25,4 +25,11 @@ class TimeOffServiceImpl(@Autowired private val timeOffRepository: TimeOffReposi
             it.toModel()
         }
     }
+
+    override fun findTimeOffRequests(): List<TimeOffRequestEntity> {
+        val list = timeOffRepository.findAll()
+        return list.map {
+            it.toModel()
+        }
+    }
 }

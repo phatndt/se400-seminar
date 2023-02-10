@@ -20,8 +20,13 @@ class TimeOffRequestController(@Autowired private val timeOffService: TimeOffSer
     }
 
     @RequestMapping(ApiEntryPoint.READ_TIME_OFF_BY_USER_ID, method = [RequestMethod.POST])
-    fun createTimeOffRequest(@RequestBody map: Map<String, String>): ResponseEntity<List<TimeOffRequestEntity>> {
+    fun readTimeOffByUserId(@RequestBody map: Map<String, String>): ResponseEntity<List<TimeOffRequestEntity>> {
         val value = map["userId"]?.let { timeOffService.findTimeOffRequestsByUserId(userId = it) }
+        return ResponseEntity(value, HttpStatus.OK)
+    }
+    @RequestMapping(ApiEntryPoint.READ_TIME_OFF, method = [RequestMethod.POST])
+    fun readAllTimeOff(): ResponseEntity<List<TimeOffRequestEntity>> {
+        val value = timeOffService.findTimeOffRequests()
         return ResponseEntity(value, HttpStatus.OK)
     }
 }
